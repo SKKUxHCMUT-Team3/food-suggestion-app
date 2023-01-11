@@ -25,11 +25,23 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.fill,
-            image: AssetImage("assets/images/dog.jpg"),
+      home: Scaffold(
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.fill,
+              image: AssetImage("assets/images/dog.jpg"),
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              Text("Foodeul", style: TextStyle(color: Colors.white, fontSize: 100,), textAlign: TextAlign.center,),
+              Text("that you like,\nbut you don't know", style: TextStyle(color: Colors.white, fontSize: 30,), textAlign: TextAlign.center,),
+            ],
           ),
         ),
       )
