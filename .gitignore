@@ -1,3 +1,11 @@
+/__pycache__/
+/skku
+.env
+.venv
+env/
+venv/
+ENV/
+
 # Miscellaneous
 *.class
 *.log
@@ -42,3 +50,5 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+
