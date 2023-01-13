@@ -41,17 +41,17 @@ class _HomePageState extends State<HomePage> {
                   decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(0)),
-                      borderSide: BorderSide(color: Colors.orange, width: 6),
+                      borderSide: BorderSide(color: Color(0xffFF8A00), width: 6),
                     ),
                     focusedBorder: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(0)),
-                      borderSide: BorderSide(color: Colors.orange, width: 6),
+                      borderSide: BorderSide(color: Color(0xffFF8A00), width: 6),
                     ),
                     hintText: "input food",
                     suffixIcon: Container(
                       width: 40,
                       height: 40,
-                      color: Colors.orange,
+                      color: const Color(0xffFF8A00),
                       margin: const EdgeInsets.fromLTRB(0, 10, 10, 10),
                       child: IconButton(
                         onPressed: () {
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                             width: double.infinity,
                             height: double.infinity,
                             child: Image.asset(
-                              "assets/images/dog.jpg",
+                              "assets/images/arrow_button.png",
                               fit: BoxFit.fill,
                             )),
                         padding: const EdgeInsets.all(0),

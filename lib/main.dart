@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Foodeul',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        primaryColor: const Color(0xffFF8A00),
       ),
       home: const SplashScreen(),
     );
