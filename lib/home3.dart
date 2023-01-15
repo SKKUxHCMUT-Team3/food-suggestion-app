@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'home4.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomePage3 extends StatefulWidget {
+  const HomePage3({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePage3> createState() => _HomePage3State();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePage3State extends State<HomePage3> {
   TextEditingController CtrlTextFormField = TextEditingController();
 
   @override
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
-              "Familiar Country",
+              "your favorite food",
               style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.all(Radius.circular(0)),
                       borderSide: BorderSide(color: Color(0xffFF8A00), width: 6),
                     ),
-                    hintText: "input food",
+                    // hintText: "input food",
                     suffixIcon: Container(
                       width: 40,
                       height: 40,
@@ -55,7 +56,10 @@ class _HomePageState extends State<HomePage> {
                       margin: const EdgeInsets.fromLTRB(0, 10, 10, 10),
                       child: IconButton(
                         onPressed: () {
-                          print("${CtrlTextFormField.text}");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const HomePage4()),
+                          );
                         },
                         icon: Container(
                             width: double.infinity,
