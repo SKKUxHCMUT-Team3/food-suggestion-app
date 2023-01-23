@@ -5,26 +5,26 @@ from flask import Flask, request, jsonify, session, Response
 import pandas as pd
 import numpy as np
 from itertools import chain
-from sklearn.feature_extraction.text import CountVectorizer 
-from sklearn.metrics.pairwise import cosine_similarity 
+from sentence_transformers import SentenceTransformer, util
+model = SentenceTransformer('sentence-transformers/paraphrase-distilroberta-base-v1')
 
-data = pd.read_csv('../v-recipes.txt', sep=':', header = None)
-data[1] = data[1].str.replace(",", " ")
+frydf = pd.read_csv('frydf.csv').copy()
+heatdf = pd.read_csv('heatdf.csv').copy()
+bakedf = pd.read_csv('bakedf.csv').copy()
+stirfrydf = pd.read_csv('stirfrydf.csv').copy()
+boildowndf = pd.read_csv('boildowndf.csv').copy()
+griddledf = pd.read_csv('griddledf.csv').copy()
+steamdf = pd.read_csv('steamdf.csv').copy()
+seasondf = pd.read_csv('seasondf.csv').copy()
+pickledf = pd.read_csv('pickledf.csv').copy()
+rubdf = pd.read_csv('rubdf.csv').copy()
+blanchdf = pd.read_csv('blanchdf.csv').copy()
+boildf = pd.read_csv('boildf.csv').copy()
+rawdf = pd.read_csv('rawdf.csv').copy()
+otherdf = pd.read_csv('otherdf.csv').copy()
+vietdf = pd.read_csv('vietdf.csv').copy()
 
-count_vect_category = CountVectorizer(min_df=0, ngram_range=(1,2))
-place_category = count_vect_category.fit_transform(data[1]) 
-place_simi_cate = cosine_similarity(place_category, place_category) 
-place_simi_cate_sorted_ind = place_simi_cate.argsort()[:, ::-1]
-pd.DataFrame(place_simi_cate_sorted_ind)
-
-def find_simi_place(df, sorted_ind, place_name, top_n=10):
-    place_title = data[data[0] == place_name]
-    place_index = place_title.index.values
-    similar_indexes = sorted_ind[place_index, :(top_n)]
-    similar_indexes = similar_indexes.reshape(-1)
-    return df.iloc[similar_indexes]
-
-
+recipe_list = [frydf,heatdf,bakedf,stirfrydf,boildowndf,griddledf,steamdf,seasondf,pickledf,rubdf,blanchdf,boildf,rawdf,otherdf,vietdf]
 
 app = Flask(__name__)
 
@@ -92,24 +92,58 @@ def register():
 
 @app.route('/findSimilar', methods = ['POST'])
 def findSimilar():
-    if auth.current_user is None:
-        return {'message': 'No users signed in'}, 400
+    # if auth.current_user is None:
+    #     return {'message': 'No users signed in'}, 400
 
-    food_input= request.json.get('input')
-    input_list = []
-    for i in range(len(data)):
-        if food_input in data[0][i]:
-            input_list.append(data[0][i])
+    food_input= request.json.get('food_input')
+    ingredient_input = request.json.get('ingredient_input')
+    # drop foods that contains 'ingredient_input'
+    for i in recipe_list:
+        idx = i[i['CKG_MTRL_CN'].str.contains(ingredient_input)].index
+        i.drop(idx, inplace=True)
+        i.reset_index(inplace=True, drop=True)
 
-    tmp_dishes_list = []
-    for user_input in input_list:
-        recipes = find_simi_place(data, place_simi_cate_sorted_ind, user_input, 5)
-        tmp_dishes_list.append(recipes[0].astype(str).tolist())
+    # select df that contains 'food_input', insert that one row to 'vietdf' and variables declaration
+    for i in recipe_list:
+        if food_input in i['CKG_NM'].to_list():
+            train_data = i
 
-    similar_dishes_list = list(chain.from_iterable(tmp_dishes_list))
-    list(set(similar_dishes_list))
+    for i in range(len(train_data['CKG_NM'])):
+        if food_input == train_data['CKG_NM'][i]:
+            food_indf = train_data.iloc[i:i+1]
+
+    if 'food_indf' not in locals():
+        for i in range(len(train_data['CKG_NM'])):
+            if food_input in train_data['CKG_NM'][i]:
+                food_indf = train_data.iloc[i:i+1]
+    #food_indf.drop('index', axis=1, inplace=True)
+
+    # variables declaration
+    doc = pd.concat([food_indf, vietdf])
+    doc_reci = doc["CKG_MTRL_CN"].to_list()
+    doc_name = doc["CKG_NM"].to_list()
+
+    # vector embedding(?), calculating cosine_similarities
+    embeddings = model.encode(doc_reci, convert_to_tensor=True)
+    cosine_scores = util.pytorch_cos_sim(embeddings, embeddings)       
+
+    temp = cosine_scores[0]
+    temp.argsort(descending=True)[0:10]
+    tmp_dishes_list =[]
+    for i in temp.argsort(descending=True)[0:10]:
+        tmp_dishes_list.append(doc_name[i])
+        # print('here')
+        print(f"{doc_name[i]}")
+
+    # for user_input in input_list:
+    #     recipes = find_simi_place(data, place_simi_cate_sorted_ind, user_input, 5)
+    #     tmp_dishes_list.append(recipes[0].astype(str).tolist())
     
-    return {"similar_dishes": f"{similar_dishes_list}"}, 200  
+    # similar_dishes_list = list(chain.from_iterable(tmp_dishes_list))
+    # list(set(similar_dishes_list))
+    
+    return {"similar_dishes": f"{tmp_dishes_list}"}, 200  
+    # return {"similar_dishes": "sth"}, 200  
 
 if __name__ == '__main__':
     app.run(host = '0.0.0.0', port = 5000)
