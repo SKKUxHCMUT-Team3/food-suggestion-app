@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 from itertools import chain
 from sentence_transformers import SentenceTransformer, util
+
 model = SentenceTransformer('sentence-transformers/paraphrase-distilroberta-base-v1')
 
 frydf = pd.read_csv('frydf.csv').copy()
@@ -25,6 +26,7 @@ otherdf = pd.read_csv('otherdf.csv').copy()
 vietdf = pd.read_csv('vietdf.csv').copy()
 
 recipe_list = [frydf,heatdf,bakedf,stirfrydf,boildowndf,griddledf,steamdf,seasondf,pickledf,rubdf,blanchdf,boildf,rawdf,otherdf,vietdf]
+
 
 app = Flask(__name__)
 
@@ -74,7 +76,6 @@ def logout():
     return {"message": f"{current_user['email']} signed out"}, 200
 
 
-
 @app.route('/register', methods = ['GET','POST'])
 def register():
     if request.method == 'POST':
@@ -90,8 +91,111 @@ def register():
             return f"An Error Occurred: {e}"
 
 
-@app.route('/findSimilar', methods = ['POST'])
-def findSimilar():
+@app.route('/category1', methods = ['POST'])
+def category1():
+    # if auth.current_user is None:
+    #     return {'message': 'No users signed in'}, 400
+
+    food_input= request.json.get('food_input')
+    ingredient_input = request.json.get('ingredient_input')
+    
+    # drop foods that contains 'ingredient_input'
+    for i in recipe_list:
+        idx = i[i['CKG_MTRL_CN'].str.contains(ingredient_input)].index
+        i.drop(idx, inplace=True)
+        i.reset_index(inplace=True)
+
+    # select df that contains 'food_input' and variables declaration
+
+    for i in recipe_list:
+          if food_input in i['CKG_NM'].to_list():
+            train_data = i
+            doc_reci = train_data["CKG_MTRL_CN"].to_list()
+            doc_name = train_data["CKG_NM"].to_list()
+            embeddings = model.encode(doc_reci, convert_to_tensor=True)
+            cosine_scores = util.pytorch_cos_sim(embeddings, embeddings)
+
+    # find orders of 'food_input'
+    for i in range(len(train_data['CKG_NM'])):
+        if train_data['CKG_NM'][i] == food_input:
+            org=i
+    
+    # when 'org' is not defined
+    if 'org' not in locals():
+        org=0
+
+    temp=cosine_scores[org]
+    temp.argsort(descending=True)[0:10]
+    tmp_dishes_list =[]
+
+    for i in temp.argsort(descending=True)[0:10]:
+        tmp_dishes_list.append(doc_name[i])
+        print(f"{doc_name[i]}")
+
+    # for user_input in input_list:
+    #     recipes = find_simi_place(data, place_simi_cate_sorted_ind, user_input, 5)
+    #     tmp_dishes_list.append(recipes[0].astype(str).tolist())
+    
+    # similar_dishes_list = list(chain.from_iterable(tmp_dishes_list))
+    # list(set(similar_dishes_list))
+    
+    return {"similar_dishes": f"{tmp_dishes_list}"}, 200  
+    # return {"similar_dishes": "sth"}, 200  
+
+
+@app.route('/category2', methods = ['POST'])
+def category2():
+    # if auth.current_user is None:
+    #     return {'message': 'No users signed in'}, 400
+
+    food_input= request.json.get('food_input')
+    ingredient_input = request.json.get('ingredient_input')
+    
+    # drop foods that contains 'ingredient_input'
+    idx = vietdf[vietdf['CKG_MTRL_CN'].str.contains(ingredient_input)].index
+    vietdf.drop(idx, inplace=True)
+    vietdf.reset_index(inplace=True)
+
+    # variables declaration
+    doc_reci = vietdf["CKG_MTRL_CN"].to_list()
+    doc_name = vietdf["CKG_NM"].to_list()
+
+    # vector embedding(?), calculating cosine_similarities
+    embeddings = model.encode(doc_reci, convert_to_tensor=True)
+    cosine_scores = util.pytorch_cos_sim(embeddings, embeddings)    
+
+    # find orders of 'food_input'
+    for i in range(len(vietdf['CKG_NM'])):
+        if vietdf['CKG_NM'][i] == food_input:
+            org=i
+        elif food_input in vietdf['CKG_NM'][i]:
+            org=i
+    
+    # when 'org' is not defined
+    if 'org' not in locals():
+        org=0
+
+    temp=cosine_scores[org]
+    temp.argsort(descending=True)[0:10]
+    tmp_dishes_list =[]
+
+    for i in temp.argsort(descending=True)[0:10]:
+        tmp_dishes_list.append(doc_name[i])
+        print(f"{doc_name[i]}")
+
+    # for user_input in input_list:
+    #     recipes = find_simi_place(data, place_simi_cate_sorted_ind, user_input, 5)
+    #     tmp_dishes_list.append(recipes[0].astype(str).tolist())
+    
+    # similar_dishes_list = list(chain.from_iterable(tmp_dishes_list))
+    # list(set(similar_dishes_list))
+    
+    return {"similar_dishes": f"{tmp_dishes_list}"}, 200  
+    # return {"similar_dishes": "sth"}, 200  
+
+
+@app.route('/category3', methods = ['POST'])
+def category3():
     # if auth.current_user is None:
     #     return {'message': 'No users signed in'}, 400
 
@@ -120,6 +224,60 @@ def findSimilar():
 
     # variables declaration
     doc = pd.concat([food_indf, vietdf])
+    doc_reci = doc["CKG_MTRL_CN"].to_list()
+    doc_name = doc["CKG_NM"].to_list()
+
+    # vector embedding(?), calculating cosine_similarities
+    embeddings = model.encode(doc_reci, convert_to_tensor=True)
+    cosine_scores = util.pytorch_cos_sim(embeddings, embeddings)       
+
+    temp = cosine_scores[0]
+    temp.argsort(descending=True)[0:10]
+    tmp_dishes_list =[]
+    for i in temp.argsort(descending=True)[0:10]:
+        tmp_dishes_list.append(doc_name[i])
+        # print('here')
+        print(f"{doc_name[i]}")
+
+    # for user_input in input_list:
+    #     recipes = find_simi_place(data, place_simi_cate_sorted_ind, user_input, 5)
+    #     tmp_dishes_list.append(recipes[0].astype(str).tolist())
+    
+    # similar_dishes_list = list(chain.from_iterable(tmp_dishes_list))
+    # list(set(similar_dishes_list))
+    
+    return {"similar_dishes": f"{tmp_dishes_list}"}, 200  
+    # return {"similar_dishes": "sth"}, 200  
+
+
+@app.route('/category4', methods = ['POST'])
+def category4():
+    # if auth.current_user is None:
+    #     return {'message': 'No users signed in'}, 400
+
+    food_input= request.json.get('food_input')
+    ingredient_input = request.json.get('ingredient_input')
+    # drop foods that contains 'ingredient_input'
+    for i in recipe_list:
+        idx = i[i['CKG_MTRL_CN'].str.contains(ingredient_input)].index
+        i.drop(idx, inplace=True)
+        i.reset_index(inplace=True, drop=True)
+
+   # select df that contains 'food_input', insert that one row to 'vietdf' and variables declaration
+    for i in range(len(vietdf['CKG_NM'])):
+        if food_input == vietdf['CKG_NM'][i]:
+            food_indf = vietdf.iloc[i:i+1]
+
+    if 'food_indf' not in locals():
+        for i in range(len(vietdf['CKG_NM'])):
+            if food_input in vietdf['CKG_NM'][i]:
+                food_indf = vietdf.iloc[i:i+1]
+
+    #food_indf.drop('index', axis=1, inplace=True)
+    otherdf['CKG_MTH_ACTO_NM']
+    # variables declaration
+
+    doc = pd.concat([food_indf, recipe_list[1]]) # we have to fill 'CKG_MTH_ACTO_NM' columns (vietdf)
     doc_reci = doc["CKG_MTRL_CN"].to_list()
     doc_name = doc["CKG_NM"].to_list()
 
