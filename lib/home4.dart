@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'outputsplash.dart';
 import 'package:get/get.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'HTTPHelper.dart';
 
 class HomePage4 extends StatefulWidget {
   const HomePage4({super.key});
@@ -81,8 +84,9 @@ class _HomePage4State extends State<HomePage4> {
                       setState(() {
                         if (newTexts.isEmpty) {
                           newTexts.add(TextButton(
-                            onPressed: () {
-                              Get.to(const OutputSplashScreen());
+                            onPressed: () async {
+                              var response = await HTTPHelper().addFood();
+                              Get.to(OutputSplashScreen(response: response));
                             },
                             child: const Text("Submit"),
                           ));
@@ -140,9 +144,11 @@ class _HomePage4State extends State<HomePage4> {
       color: const Color(0xffFF8A00),
       margin: const EdgeInsets.fromLTRB(0, 10, 10, 10),
       child: IconButton(
-        onPressed: () {
-          Get.to(const OutputSplashScreen());
-        },
+        onPressed: () async {
+          // makeRequest();
+          var response = await HTTPHelper().addFood();
+          Get.to(OutputSplashScreen(response: response));
+        }, ////////////////////////////////////////////////////
         icon: Container(
             width: double.infinity,
             height: double.infinity,

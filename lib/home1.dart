@@ -42,11 +42,13 @@ class _HomePage1State extends State<HomePage1> {
                   decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(0)),
-                      borderSide: BorderSide(color: Color(0xffFF8A00), width: 6),
+                      borderSide:
+                          BorderSide(color: Color(0xffFF8A00), width: 6),
                     ),
                     focusedBorder: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(0)),
-                      borderSide: BorderSide(color: Color(0xffFF8A00), width: 6),
+                      borderSide:
+                          BorderSide(color: Color(0xffFF8A00), width: 6),
                     ),
                     // hintText: "input food",
                     suffixIcon: Container(
@@ -58,7 +60,9 @@ class _HomePage1State extends State<HomePage1> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const HomePage2()),
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    HomePage2(value: CtrlTextFormField.text)),
                           );
                         },
                         icon: Container(

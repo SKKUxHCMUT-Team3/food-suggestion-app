@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class OutputPage1 extends StatefulWidget {
-  const OutputPage1({super.key});
+  final String result;
+  OutputPage1({required this.result});
 
   @override
   State<OutputPage1> createState() => _OutputPage1State();
@@ -28,6 +29,7 @@ class _OutputPage1State extends State<OutputPage1> {
               style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
+            Text(widget.result),
             const SizedBox(
               height: 12,
             ),

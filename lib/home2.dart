@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'home3.dart';
 
 class HomePage2 extends StatefulWidget {
-  const HomePage2({super.key});
+  final String value;
+  HomePage2({required this.value});
 
   @override
   State<HomePage2> createState() => _HomePage2State();
@@ -24,6 +25,7 @@ class _HomePage2State extends State<HomePage2> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Text("You typed: " + widget.value),
             const Text(
               "Curious Country",
               style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
@@ -50,7 +52,7 @@ class _HomePage2State extends State<HomePage2> {
                       borderSide:
                           BorderSide(color: Color(0xffFF8A00), width: 6),
                     ),
-                    // hintText: "input food",
+                    hintText: widget.value,
                     suffixIcon: Container(
                       width: 40,
                       height: 40,
@@ -60,7 +62,8 @@ class _HomePage2State extends State<HomePage2> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const HomePage3()),
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage3()),
                           );
                         },
                         icon: Container(
