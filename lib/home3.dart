@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'home4.dart';
 
 class HomePage3 extends StatefulWidget {
@@ -25,7 +26,7 @@ class _HomePage3State extends State<HomePage3> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
-              "your favorite food",
+              "Your favorite food",
               style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
@@ -42,13 +43,15 @@ class _HomePage3State extends State<HomePage3> {
                   decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(0)),
-                      borderSide: BorderSide(color: Color(0xffFF8A00), width: 6),
+                      borderSide:
+                          BorderSide(color: Color(0xffFF8A00), width: 6),
                     ),
                     focusedBorder: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(0)),
-                      borderSide: BorderSide(color: Color(0xffFF8A00), width: 6),
+                      borderSide:
+                          BorderSide(color: Color(0xffFF8A00), width: 6),
                     ),
-                    // hintText: "input food",
+                    hintText: "input foo",
                     suffixIcon: Container(
                       width: 40,
                       height: 40,
@@ -58,7 +61,8 @@ class _HomePage3State extends State<HomePage3> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const HomePage4()),
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage4()),
                           );
                         },
                         icon: Container(

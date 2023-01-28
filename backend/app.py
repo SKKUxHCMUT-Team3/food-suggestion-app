@@ -96,28 +96,28 @@ def category1():
     # if auth.current_user is None:
     #     return {'message': 'No users signed in'}, 400
 
-    food_input= request.json.get('food_input')
-    ingredient_input = request.json.get('ingredient_input')
+    favDish= request.json.get('favDish')
+    dislikeIngredient = request.json.get('dislikeIngredient')
     
-    # drop foods that contains 'ingredient_input'
+    # drop foods that contains 'dislikeIngredient'
     for i in recipe_list:
-        idx = i[i['CKG_MTRL_CN'].str.contains(ingredient_input)].index
+        idx = i[i['CKG_MTRL_CN'].str.contains(dislikeIngredient)].index
         i.drop(idx, inplace=True)
         i.reset_index(inplace=True)
 
-    # select df that contains 'food_input' and variables declaration
+    # select df that contains 'favDish' and variables declaration
 
     for i in recipe_list:
-          if food_input in i['CKG_NM'].to_list():
+          if favDish in i['CKG_NM'].to_list():
             train_data = i
             doc_reci = train_data["CKG_MTRL_CN"].to_list()
             doc_name = train_data["CKG_NM"].to_list()
             embeddings = model.encode(doc_reci, convert_to_tensor=True)
             cosine_scores = util.pytorch_cos_sim(embeddings, embeddings)
 
-    # find orders of 'food_input'
+    # find orders of 'favDish'
     for i in range(len(train_data['CKG_NM'])):
-        if train_data['CKG_NM'][i] == food_input:
+        if train_data['CKG_NM'][i] == favDish:
             org=i
     
     # when 'org' is not defined
@@ -148,11 +148,11 @@ def category2():
     # if auth.current_user is None:
     #     return {'message': 'No users signed in'}, 400
 
-    food_input= request.json.get('food_input')
-    ingredient_input = request.json.get('ingredient_input')
+    favDish= request.json.get('favDish')
+    dislikeIngredient = request.json.get('dislikeIngredient')
     
-    # drop foods that contains 'ingredient_input'
-    idx = vietdf[vietdf['CKG_MTRL_CN'].str.contains(ingredient_input)].index
+    # drop foods that contains 'dislikeIngredient'
+    idx = vietdf[vietdf['CKG_MTRL_CN'].str.contains(dislikeIngredient)].index
     vietdf.drop(idx, inplace=True)
     vietdf.reset_index(inplace=True)
 
@@ -164,11 +164,11 @@ def category2():
     embeddings = model.encode(doc_reci, convert_to_tensor=True)
     cosine_scores = util.pytorch_cos_sim(embeddings, embeddings)    
 
-    # find orders of 'food_input'
+    # find orders of 'favDish'
     for i in range(len(vietdf['CKG_NM'])):
-        if vietdf['CKG_NM'][i] == food_input:
+        if vietdf['CKG_NM'][i] == favDish:
             org=i
-        elif food_input in vietdf['CKG_NM'][i]:
+        elif favDish in vietdf['CKG_NM'][i]:
             org=i
     
     # when 'org' is not defined
@@ -199,26 +199,26 @@ def category3():
     # if auth.current_user is None:
     #     return {'message': 'No users signed in'}, 400
 
-    food_input= request.json.get('food_input')
-    ingredient_input = request.json.get('ingredient_input')
-    # drop foods that contains 'ingredient_input'
+    favDish= request.json.get('favDish')
+    dislikeIngredient = request.json.get('dislikeIngredient')
+    # drop foods that contains 'dislikeIngredient'
     for i in recipe_list:
-        idx = i[i['CKG_MTRL_CN'].str.contains(ingredient_input)].index
+        idx = i[i['CKG_MTRL_CN'].str.contains(dislikeIngredient)].index
         i.drop(idx, inplace=True)
         i.reset_index(inplace=True, drop=True)
 
-    # select df that contains 'food_input', insert that one row to 'vietdf' and variables declaration
+    # select df that contains 'favDish', insert that one row to 'vietdf' and variables declaration
     for i in recipe_list:
-        if food_input in i['CKG_NM'].to_list():
+        if favDish in i['CKG_NM'].to_list():
             train_data = i
 
     for i in range(len(train_data['CKG_NM'])):
-        if food_input == train_data['CKG_NM'][i]:
+        if favDish == train_data['CKG_NM'][i]:
             food_indf = train_data.iloc[i:i+1]
 
     if 'food_indf' not in locals():
         for i in range(len(train_data['CKG_NM'])):
-            if food_input in train_data['CKG_NM'][i]:
+            if favDish in train_data['CKG_NM'][i]:
                 food_indf = train_data.iloc[i:i+1]
     #food_indf.drop('index', axis=1, inplace=True)
 
@@ -255,22 +255,22 @@ def category4():
     # if auth.current_user is None:
     #     return {'message': 'No users signed in'}, 400
 
-    food_input= request.json.get('food_input')
-    ingredient_input = request.json.get('ingredient_input')
-    # drop foods that contains 'ingredient_input'
+    favDish= request.json.get('favDish')
+    dislikeIngredient = request.json.get('dislikeIngredient')
+    # drop foods that contains 'dislikeIngredient'
     for i in recipe_list:
-        idx = i[i['CKG_MTRL_CN'].str.contains(ingredient_input)].index
+        idx = i[i['CKG_MTRL_CN'].str.contains(dislikeIngredient)].index
         i.drop(idx, inplace=True)
         i.reset_index(inplace=True, drop=True)
 
-   # select df that contains 'food_input', insert that one row to 'vietdf' and variables declaration
+   # select df that contains 'favDish', insert that one row to 'vietdf' and variables declaration
     for i in range(len(vietdf['CKG_NM'])):
-        if food_input == vietdf['CKG_NM'][i]:
+        if favDish == vietdf['CKG_NM'][i]:
             food_indf = vietdf.iloc[i:i+1]
 
     if 'food_indf' not in locals():
         for i in range(len(vietdf['CKG_NM'])):
-            if food_input in vietdf['CKG_NM'][i]:
+            if favDish in vietdf['CKG_NM'][i]:
                 food_indf = vietdf.iloc[i:i+1]
 
     #food_indf.drop('index', axis=1, inplace=True)

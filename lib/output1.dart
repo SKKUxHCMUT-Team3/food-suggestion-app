@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class OutputPage1 extends StatefulWidget {
-  const OutputPage1({super.key});
+  // const OutputPage1({super.key});
+
+  List<String> response;
+
+  OutputPage1({required this.response});
 
   @override
   State<OutputPage1> createState() => _OutputPage1State();
@@ -33,14 +38,21 @@ class _OutputPage1State extends State<OutputPage1> {
             ),
             Container(
               width: double.infinity,
-              height: 300,
+              // height: 300,
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.all(50),
               decoration: BoxDecoration(
                 border: Border.all(
                   width: 6,
                   color: const Color(0xffFF8A00),
                 ),
               ),
-            ),
+              child: Column(
+                children: List.generate(widget.response.length, (index) {
+                  return Text(widget.response[index].toString());
+                }),
+              ),
+            )
           ],
         ),
       ),

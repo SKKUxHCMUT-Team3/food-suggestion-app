@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home1.dart';
+import 'form.dart';
 
 class HomeSplashScreen extends StatefulWidget {
   const HomeSplashScreen({super.key});
@@ -16,7 +16,7 @@ class _HomeSplashScreenState extends State<HomeSplashScreen> {
       const Duration(seconds: 4),
       () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage1()),
+        MaterialPageRoute(builder: (context) => const FormPage()),
       ),
     );
   }

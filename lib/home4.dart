@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'outputsplash.dart';
 import 'package:get/get.dart';
 
@@ -39,7 +40,7 @@ class _HomePage4State extends State<HomePage4> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
-              "ingredient you don't like",
+              "Ingredient you don't like",
               style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
