@@ -10,11 +10,6 @@ class baseClient {
     var url = Uri.parse(baseUrl + api);
     var _payload = json.encode(object.toJson());
 
-    // Map<String, String> data = {
-    //   'favDish': object.favDish,
-    //   'dislikeIngredient': object.dislikeIngredient.toString(),
-    // };
-
     debugPrint(url.toString());
 
     var response = await http.post(url, body: _payload, headers: _setHeaders());
@@ -24,7 +19,7 @@ class baseClient {
     if (response.statusCode == 200) {
       return response.body;
     } else {
-      return "An Error Occurred: ${response.statusCode} ${response.reasonPhrase}";
+      return "An Error Occurred: ${response.statusCode}";
     }
   }
 }

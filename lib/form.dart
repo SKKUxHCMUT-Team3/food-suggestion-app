@@ -182,55 +182,60 @@ class _FormPageState extends State<FormPage> {
                     primary: Color(0xffFF8A00), // background
                     onPrimary: Colors.white, // foreground
                   ),
-                  onPressed: () async {
+                  onPressed: () {
                     var input = Input(
-                      // famCountry: _famCountryController.text.toString(),
-                      // curCountry: _curCountryController.text.toString(),
-                      // favDish: _favDishController.text.toString(),
-                      // dislikeIngredient:
-                      //     _dislikeIngredientController.text.toString(),
+                      famCountry:
+                          _famCountryController.text.toString().toLowerCase(),
+                      curCountry:
+                          _curCountryController.text.toString().toLowerCase(),
+                      favDish: _favDishController.text.toString().toLowerCase(),
+                      dislikeIngredient: _dislikeIngredientController.text
+                          .toString()
+                          .toLowerCase(),
 
-                      famCountry: 'Vietnam',
-                      curCountry: 'Vietnam',
-                      favDish: 'pho',
-                      dislikeIngredient: 'mushroom',
+                      // famCountry: 'vietnam',
+                      // curCountry: 'vietnam',
+                      // favDish: 'pho',
+                      // dislikeIngredient: 'mushroom',
                     );
                     debugPrint(input.famCountry);
                     debugPrint(input.curCountry);
                     debugPrint(input.favDish);
                     debugPrint(input.dislikeIngredient);
-                    final response;
+                    // final response;
 
-                    if (input.famCountry == "Korea" &&
-                        input.curCountry == "Korea") {
-                      response = await baseClient().post('/category1', input);
-                      if (response == null) return;
-                      debugPrint('Cat1 success');
-                    } else if (input.famCountry == "Vietnam" &&
-                        input.curCountry == "Vietnam") {
-                      response = await baseClient().post('/category2', input);
-                      if (response == null) return;
-                      debugPrint('Cat2 success');
-                    } else if (input.famCountry == "Korea" &&
-                        input.curCountry == "Vietnam") {
-                      response = await baseClient().post('/category3', input);
-                      if (response == null) return;
-                      debugPrint('Cat3 success');
-                    } else {
-                      response = await baseClient().post('/category4', input);
-                      if (response == null) return;
-                      debugPrint('Cat4 success');
-                    }
+                    // if (input.famCountry == "korea" &&
+                    //     input.curCountry == "korea") {
+                    //   response = await baseClient().post('/category1', input);
+                    //   if (response == null) return;
+                    //   debugPrint('Cat1 success');
+                    // } else if (input.famCountry == "vietnam" &&
+                    //     input.curCountry == "vietnam") {
+                    //   response = await baseClient().post('/category2', input);
+                    //   if (response == null) return;
+                    //   debugPrint('Cat2 success');
+                    // } else if (input.famCountry == "korea" &&
+                    //     input.curCountry == "vietnam") {
+                    //   response = await baseClient().post('/category3', input);
+                    //   if (response == null) return;
+                    //   debugPrint('Cat3 success');
+                    // } else {
+                    //   response = await baseClient().post('/category4', input);
+                    //   if (response == null) return;
+                    //   debugPrint('Cat4 success');
+                    // }
 
-                    var dishesJson = jsonDecode(response)['dishes'];
-                    List<String>? dishes =
-                        dishesJson != null ? List.from(dishesJson) : null;
+                    // var dishesJson = jsonDecode(response)['dishes'];
+                    // List<String>? dishes =
+                    //     dishesJson != null ? List.from(dishesJson) : null;
 
-                    print(dishes);
+                    // print(dishes);
 
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => OutputSplashScreen(
-                            response: List<String>.from(dishes!))));
+                        builder: (context) =>
+                            OutputSplashScreen(input: input)));
+
+                    // Get.to(OutputSplashScreen(input: input));
                   },
                   child: const Text('Submit', style: TextStyle(fontSize: 17)),
                 )
