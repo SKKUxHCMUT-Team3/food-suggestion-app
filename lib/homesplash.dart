@@ -39,8 +39,8 @@ class _HomeSplashScreenState extends State<HomeSplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: const [
-              Text("Foodeul", style: TextStyle(color: Colors.white, fontSize: 100,), textAlign: TextAlign.center,),
-              Text("that you like,\nbut you don't know", style: TextStyle(color: Colors.white, fontSize: 30,), textAlign: TextAlign.center,),
+              Text("Foodeul", style: TextStyle(color: Colors.white, fontSize: 100, fontWeight: FontWeight.w900), textAlign: TextAlign.center,),
+              Text("that you like,\nbut you don't know", style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w900), textAlign: TextAlign.center,),
             ],
           ),
         ),
